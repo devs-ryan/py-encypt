@@ -5,6 +5,7 @@ from base64 import b64encode, b64decode
 from simplecrypt import encrypt, decrypt
 
 APP_KEY=''
+PASSWORD_HINT=''
 
 def usage():
     print('===================')
@@ -27,6 +28,11 @@ def usage():
     print('  Flags:')
     print('    --output')
     print('      (Will request an output file name rather than printing to terminal)')
+    print('  ------------')
+    print('  [3] Hint:')
+    print('  ------------')
+    print('  Option = hint')
+    print('  Displays password hint')
 
 def encryptTxt(password, txt):
     ciphertext = encrypt(password+APP_KEY, txt)
@@ -83,7 +89,7 @@ def encryptProcedure():
 
 if __name__ == "__main__":
     #check for correct usage
-    if len(sys.argv) < 2 or (sys.argv[1] != 'encrypt' and sys.argv[1] != 'decrypt'):
+    if len(sys.argv) < 2 or (sys.argv[1] != 'encrypt' and sys.argv[1] != 'decrypt' and sys.argv[1] != 'hint'):
         usage()
         sys.exit()
     #decrypt
@@ -91,6 +97,8 @@ if __name__ == "__main__":
         print('decrypting...')
         decryptProcedure()
     #encrypt
-    else:
+    elif sys.argv[1] == 'decrypt':
         print('encrypting...')
         encryptProcedure()
+    else:
+        print(PASSWORD_HINT)
