@@ -12,7 +12,7 @@ def usage():
     print('=====Py-Encrypt====')
     print('===================')
     print('Usage:')
-    print('  ./cryptor [option] [flag]')
+    print('  cryptor [option] [flag]')
     print('Options:')
     print('  ------------')
     print('  [1] Encrypt:')
