@@ -9,7 +9,7 @@ PASSWORD_HINT=''
 
 def usage():
     print('===================')
-    print('=====Py-Encrypt=====')
+    print('=====Py-Encrypt====')
     print('===================')
     print('Usage:')
     print('  ./cryptor [option] [flag]')
