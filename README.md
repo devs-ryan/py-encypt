@@ -1,6 +1,10 @@
 # py-encypt
 python text file encypt / decypt progam
 
+Optional:
+======
+* set APP_KEY='' inside script to a local KEY that will be appended to encryption passwords for extra security.
+
 Usage:
 ======
 * cryptor.py {option} {flag}
