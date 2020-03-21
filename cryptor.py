@@ -1,17 +1,20 @@
 #!/usr/local/bin/python3
 import sys
+import os
 from base64 import b64encode, b64decode
 from simplecrypt import encrypt, decrypt
 
+APP_KEY=''
+
 def usage():
     print('===================')
-    print('=====Py-Encypt=====')
+    print('=====Py-Encrypt=====')
     print('===================')
     print('Usage:')
     print('  ./cryptor.py [option] [flag]')
     print('Options:')
     print('  ------------')
-    print('  [1] Encypt:')
+    print('  [1] Encrypt:')
     print('  ------------')
     print('  Option = encrypt')
     print('  Description: Encrypts a file')
@@ -26,41 +29,56 @@ def usage():
     print('      (Will request an output file name rather than printing to terminal)')
 
 def encryptTxt(password, txt):
-    ciphertext = encrypt(password, txt)
+    ciphertext = encrypt(password+APP_KEY, txt)
     return b64encode(ciphertext).decode('utf-8')
 
 def decryptTxt(password, ciphertext):
     decoded_ciphertext = b64decode(ciphertext)
-    return decrypt(password, decoded_ciphertext)
+    try:
+        return decrypt(password+APP_KEY, decoded_ciphertext)
+    except:
+        print("Ah ah ah... you didn't say the magic word.")
+        sys.exit()
 
 def decryptProcedure():
-    filepath = input("Enter file name or path: ")
-    data_file = open(filepath,'r')
+    filepath = input("Enter file name: ")
+    #read file
+    try:
+        data_file = open(os.getcwd() + '/' + filepath,'r')
+    except FileNotFoundError:
+        print("File not found in working directory")
+        sys.exit()
+        
     file_contents = data_file.read()
     #decypt file contents
     text = decryptTxt(input("Enter a password: "), file_contents)
     if len(sys.argv) > 2 and sys.argv[2] == '--output':
-        out_file = open('decrypted.txt', 'w')
+        out_file = open(os.getcwd() + '/decrypted.txt', 'w')
         out_file.write(text.decode('utf-8'))
         out_file.close()
-        print('File decypted successfully. ("decrypted.txt" created)')
+        print('File decrypted successfully. ("decrypted.txt" created)')
     else:
         print(text.decode('utf-8'))
-        print('File decypted successfully.')
+        print('File decrypted successfully.')
 
 
 def encryptProcedure():
-    filepath = input("Enter file name or path: ")
+    filepath = input("Enter file name: ")
     #read file
-    data_file = open(filepath,'r')
+    try:
+        data_file = open(os.getcwd() + '/' + filepath,'r')
+    except FileNotFoundError:
+        print("File not found in working directory")
+        sys.exit()
+    
     file_contents = data_file.read()
-    #encypt file contents
+    #encrypt file contents
     ciphertext = encryptTxt(input("Enter a password: "), file_contents)
     #print cipher text to file
-    out_file = open('encrypted.txt', 'w')
+    out_file = open(os.getcwd() + '/encrypted.txt', 'w')
     out_file.write(ciphertext)
     out_file.close()
-    print('File encypted successfully. ("encrypted.txt" created)')
+    print('File encrypted successfully. ("encrypted.txt" created)')
 
 
 if __name__ == "__main__":
@@ -72,9 +90,7 @@ if __name__ == "__main__":
     if sys.argv[1] == 'decrypt':
         print('decrypting...')
         decryptProcedure()
-
+    #encrypt
     else:
         print('encrypting...')
         encryptProcedure()
-
-
