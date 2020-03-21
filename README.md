@@ -3,7 +3,8 @@ python text file encypt / decypt progam
 
 Optional:
 ======
-* set APP_KEY='' inside script to a local KEY that will be appended to encryption passwords for extra security.
+* set APP_KEY='{Your App Key}' inside script to a local KEY that will be appended to encryption passwords for extra security.
+* set PASSWORD_HINT='{Your PW Hint}' inside script that will be shown with the "hint" option.
 
 Usage:
 ======
@@ -22,3 +23,7 @@ Options
 * Flags:
     --output
       (Will request an output file rather than printing to terminal)
+      
+#### [3] Hint:
+* Option = hint
+* Displays password hint
