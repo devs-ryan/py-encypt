@@ -2,6 +2,11 @@
 python text file encypt / decypt progam <br>
 Place this script in your file path for easy access to encrypt/decrypt text files.
 
+Setup:
+======
+* Requires python3
+* Update path to python 3 at top of script if nessesary
+
 Optional:
 ======
 * set APP_KEY='{Your App Key}' inside script to a local KEY that will be appended to encryption passwords for extra security.
