@@ -97,7 +97,7 @@ if __name__ == "__main__":
         print('decrypting...')
         decryptProcedure()
     #encrypt
-    elif sys.argv[1] == 'decrypt':
+    elif sys.argv[1] == 'encrypt':
         print('encrypting...')
         encryptProcedure()
     else:
