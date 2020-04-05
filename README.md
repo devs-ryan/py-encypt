@@ -1,6 +1,6 @@
 # py-encypt
 python text file encypt / decypt progam <br>
-Place this script in your file path for easy access to encrypt/decrypt text files.
+Place this script in your path for easy access to encrypt/decrypt text files.
 
 Setup:
 ======
