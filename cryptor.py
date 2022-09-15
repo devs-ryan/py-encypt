@@ -27,7 +27,7 @@ def usage():
     print('  Description: Decrypts a file')
     print('  Flags:')
     print('    --output')
-    print('      (Will request an output file name rather than printing to terminal)')
+    print('      (Will output to file `decrypted.txt` rather than printing to terminal)')
     print('  ------------')
     print('  [3] Hint:')
     print('  ------------')
