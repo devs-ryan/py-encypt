@@ -58,7 +58,7 @@ def decryptProcedure():
     file_contents = data_file.read()
     #decypt file contents
     text = decryptTxt(input("Enter a password: "), file_contents)
-    if len(sys.argv) > 2 and sys.argv[2] == '--output':
+    if len(sys.argv) > 2 and sys.argv[2] in ['--output', '-o']:
         out_file = open(os.getcwd() + '/decrypted.txt', 'w')
         out_file.write(text.decode('utf-8'))
         out_file.close()
