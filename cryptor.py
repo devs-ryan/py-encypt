@@ -1,7 +1,10 @@
-#!/usr/local/bin/python3
+#!/usr/bin/python3
 import sys
 import os
 from base64 import b64encode, b64decode
+
+# pip3 install simple-crypt
+# more info: https://pypi.org/project/simple-crypt/
 from simplecrypt import encrypt, decrypt
 
 APP_KEY=''
