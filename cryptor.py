@@ -4,7 +4,8 @@ import os
 from base64 import b64encode, b64decode
 
 # pip3 install simple-crypt
-# more info: https://pypi.org/project/simple-crypt/
+# pip3 uninstall PyCrypto && pip3 install -U PyCryptodome
+# more info: https://pypi.org/project/simple-crypt/ & https://stackoverflow.com/a/62520082
 from simplecrypt import encrypt, decrypt
 
 APP_KEY=''
