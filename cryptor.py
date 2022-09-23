@@ -10,13 +10,14 @@ from simplecrypt import encrypt, decrypt
 
 APP_KEY=''
 PASSWORD_HINT=''
+FILE_PATH=''
 
 def usage():
     print('===================')
     print('=====Py-Encrypt====')
     print('===================')
     print('Usage:')
-    print('  cryptor [option] [flag]')
+    print('  cryptor.py [option] [flags]')
     print('Options:')
     print('  ------------')
     print('  [1] Encrypt:')
@@ -31,7 +32,9 @@ def usage():
     print('  Description: Decrypts a file')
     print('  Flags:')
     print('    --output')
-    print('      (Will output to file `decrypted.txt` rather than printing to terminal)')
+    print('      (Will output to file rather than printing to terminal)')
+    print('    --ignore-path')
+    print('      (Will use the current working directory instead of typical file path)')
     print('  ------------')
     print('  [3] Hint:')
     print('  ------------')
@@ -51,22 +54,24 @@ def decryptTxt(password, ciphertext):
         sys.exit()
 
 def decryptProcedure():
-    filepath = input("Enter file name: ")
+    filename = input("Enter file name: ")
     #read file
     try:
-        data_file = open(os.getcwd() + '/' + filepath,'r')
+        ignorepath = '--ignore-path' in sys.argv or '-i' in sys.argv
+        filepath = FILE_PATH if (not ignorepath and FILE_PATH and FILE_PATH != '') else os.getcwd() 
+        data_file = open(filepath + '/' + filename, 'r')
     except FileNotFoundError:
-        print("File not found in working directory")
+        print("File not found in " + filepath)
         sys.exit()
         
     file_contents = data_file.read()
     #decypt file contents
     text = decryptTxt(input("Enter a password: "), file_contents)
-    if len(sys.argv) > 2 and sys.argv[2] in ['--output', '-o']:
+    if '--output' in sys.argv or '-o' in sys.argv:
         out_file = open(os.getcwd() + '/decrypted.txt', 'w')
         out_file.write(text.decode('utf-8'))
         out_file.close()
-        print('File decrypted successfully. ("decrypted.txt" created)')
+        print('File decrypted successfully. ("decrypted.txt" created in current working directory)')
     else:
         print(text.decode('utf-8'))
         print('File decrypted successfully.')
@@ -93,7 +98,7 @@ def encryptProcedure():
 
 if __name__ == "__main__":
     #check for correct usage
-    if len(sys.argv) < 2 or (sys.argv[1] != 'encrypt' and sys.argv[1] != 'decrypt' and sys.argv[1] != 'hint'):
+    if len(sys.argv) < 2 or sys.argv[1] not in ['decrypt', 'encrypt', 'hint']:
         usage()
         sys.exit()
     #decrypt
