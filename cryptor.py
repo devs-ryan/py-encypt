@@ -1,17 +1,35 @@
 #!/usr/bin/python3
+
+
+###########
+# IMPORTS #
+###########
 import sys
 import os
+import getpass
 from base64 import b64encode, b64decode
 
+
+########################
+# INSTALL INSTRUCTIONS #
+########################
 # pip3 install simple-crypt
 # pip3 uninstall PyCrypto && pip3 install -U PyCryptodome
 # more info: https://pypi.org/project/simple-crypt/ & https://stackoverflow.com/a/62520082
 from simplecrypt import encrypt, decrypt
 
+
+####################
+# GLOBAL VARIABLES #
+####################
 APP_KEY=''
 PASSWORD_HINT=''
 FILE_PATH=''
 
+
+#########
+# USAGE #
+#########
 def usage():
     print('===================')
     print('=====Py-Encrypt====')
@@ -41,10 +59,18 @@ def usage():
     print('  Option = hint')
     print('  Displays password hint')
 
+
+###############
+# ENCYPT TEXT #
+###############
 def encryptTxt(password, txt):
     ciphertext = encrypt(password+APP_KEY, txt)
     return b64encode(ciphertext).decode('utf-8')
 
+
+###############
+# DECYPT TEXT #
+###############
 def decryptTxt(password, ciphertext):
     decoded_ciphertext = b64decode(ciphertext)
     try:
@@ -53,20 +79,26 @@ def decryptTxt(password, ciphertext):
         print("Ah ah ah... you didn't say the magic word.")
         sys.exit()
 
+
+###########
+# DECRYPT #
+###########
 def decryptProcedure():
     filename = input("Enter file name: ")
+    ignorepath = '--ignore-path' in sys.argv or '-i' in sys.argv
+    filepath = FILE_PATH if (not ignorepath and FILE_PATH and FILE_PATH != '') else os.getcwd() 
+    
     #read file
     try:
-        ignorepath = '--ignore-path' in sys.argv or '-i' in sys.argv
-        filepath = FILE_PATH if (not ignorepath and FILE_PATH and FILE_PATH != '') else os.getcwd() 
         data_file = open(filepath + '/' + filename, 'r')
     except FileNotFoundError:
         print("File not found in " + filepath)
         sys.exit()
         
     file_contents = data_file.read()
+    
     #decypt file contents
-    text = decryptTxt(input("Enter a password: "), file_contents)
+    text = decryptTxt(getpass.getpass("Enter a password: "), file_contents)
     if '--output' in sys.argv or '-o' in sys.argv:
         out_file = open(os.getcwd() + '/decrypted.txt', 'w')
         out_file.write(text.decode('utf-8'))
@@ -77,6 +109,9 @@ def decryptProcedure():
         print('File decrypted successfully.')
 
 
+###########
+# ENCRYPT #
+###########
 def encryptProcedure():
     filepath = input("Enter file name: ")
     #read file
@@ -88,7 +123,7 @@ def encryptProcedure():
     
     file_contents = data_file.read()
     #encrypt file contents
-    ciphertext = encryptTxt(input("Enter a password: "), file_contents)
+    ciphertext = encryptTxt(getpass.getpass("Enter a password: "), file_contents)
     #print cipher text to file
     out_file = open(os.getcwd() + '/encrypted.txt', 'w')
     out_file.write(ciphertext)
@@ -96,6 +131,9 @@ def encryptProcedure():
     print('File encrypted successfully. ("encrypted.txt" created)')
 
 
+########
+# MAIN #
+########
 if __name__ == "__main__":
     #check for correct usage
     if len(sys.argv) < 2 or sys.argv[1] not in ['decrypt', 'encrypt', 'hint']:
