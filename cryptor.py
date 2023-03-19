@@ -42,7 +42,9 @@ def usage():
     print('  ------------')
     print('  Option = encrypt')
     print('  Description: Encrypts a file')
-    print('  Flags: N/A')
+    print('  Flags:')
+    print('    --ignore-path')
+    print('      (Will use the current working directory instead of typical file path)')
     print('  ------------')
     print('  [2] Decrypt:')
     print('  ------------')
@@ -58,6 +60,39 @@ def usage():
     print('  ------------')
     print('  Option = hint')
     print('  Displays password hint')
+
+####################
+# PRINT FILES LIST #
+####################
+def getPath():
+    ignorepath = '--ignore-path' in sys.argv or '-i' in sys.argv
+    return FILE_PATH if (not ignorepath and FILE_PATH and FILE_PATH != '') else os.getcwd()
+
+
+###################
+# Get File Choice #
+###################
+def getFileChoice():
+    filepath = getPath() 
+    files_in_path = sorted([f for f in os.listdir(filepath) if os.path.isfile(os.path.join(filepath, f))])
+
+    #print files in path list / ID
+    for index, file in enumerate(files_in_path):
+        print('['+ str(index) +'] - ' + file)
+
+    #get user input    
+    filename = input("Enter file name: ")
+
+    #convert index entries to string filename
+    if filename.isdigit() and int(filename) < len(files_in_path):
+        filename = files_in_path[int(filename)]
+        print('Selected: ' + filename)
+
+    return {
+        'full': filepath + '/' + filename,
+        'path': filepath,
+        'name': filename
+    }
 
 
 ###############
@@ -84,15 +119,12 @@ def decryptTxt(password, ciphertext):
 # DECRYPT #
 ###########
 def decryptProcedure():
-    filename = input("Enter file name: ")
-    ignorepath = '--ignore-path' in sys.argv or '-i' in sys.argv
-    filepath = FILE_PATH if (not ignorepath and FILE_PATH and FILE_PATH != '') else os.getcwd() 
-    
+    file_choice = getFileChoice()
     #read file
     try:
-        data_file = open(filepath + '/' + filename, 'r')
+        data_file = open(file_choice['full'], 'r')
     except FileNotFoundError:
-        print("File not found in " + filepath)
+        print("File not found in " + file_choice['full'])
         sys.exit()
         
     file_contents = data_file.read()
@@ -100,10 +132,14 @@ def decryptProcedure():
     #decypt file contents
     text = decryptTxt(getpass.getpass("Enter a password: "), file_contents)
     if '--output' in sys.argv or '-o' in sys.argv:
-        out_file = open(os.getcwd() + '/decrypted.txt', 'w')
+        out_filename = input("Specify output file name: ")
+        if out_filename == '':
+            out_filename = 'decrypted.txt'
+
+        out_file = open(os.getcwd() + '/' + out_filename, 'w')
         out_file.write(text.decode('utf-8'))
         out_file.close()
-        print('File decrypted successfully. ("decrypted.txt" created in current working directory)')
+        print('File decrypted successfully. ("' + out_filename + '" created in current working directory)')
     else:
         print(text.decode('utf-8'))
         print('File decrypted successfully.')
@@ -113,10 +149,10 @@ def decryptProcedure():
 # ENCRYPT #
 ###########
 def encryptProcedure():
-    filepath = input("Enter file name: ")
+    file_choice = getFileChoice()
     #read file
     try:
-        data_file = open(os.getcwd() + '/' + filepath,'r')
+        data_file = open(file_choice['full'], 'r')
     except FileNotFoundError:
         print("File not found in working directory")
         sys.exit()
@@ -124,11 +160,16 @@ def encryptProcedure():
     file_contents = data_file.read()
     #encrypt file contents
     ciphertext = encryptTxt(getpass.getpass("Enter a password: "), file_contents)
+    
     #print cipher text to file
-    out_file = open(os.getcwd() + '/encrypted.txt', 'w')
+    encrypt_filename = input("Specify encrypted file name: ")
+    if encrypt_filename == '':
+        encrypt_filename = 'encrypted.txt'
+
+    out_file = open(encrypt_filename, 'w')
     out_file.write(ciphertext)
     out_file.close()
-    print('File encrypted successfully. ("encrypted.txt" created)')
+    print('File encrypted successfully. ("' + encrypt_filename + '" created)')
 
 
 ########
