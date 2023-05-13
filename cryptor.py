@@ -78,10 +78,18 @@ def getFileChoice():
 
     #print files in path list / ID
     for index, file in enumerate(files_in_path):
-        print('['+ str(index) +'] - ' + file)
+        if file[0] != '.':
+            print('['+ str(index) +'] - ' + file)
+
+    # add quit option
+    print('[q] - quit')
 
     #get user input    
     filename = input("Enter file name: ")
+
+    if filename == 'q':
+        print('Quitting..')
+        sys.exit()
 
     #convert index entries to string filename
     if filename.isdigit() and int(filename) < len(files_in_path):
